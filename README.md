@@ -160,15 +160,15 @@ $ twilify --help
 Usage: twilify [options]
 
 Options:
-  -v, --version                          output the version number
-  -i, --init                             Initialize the CLI
-  -o, --okta-token <oktaToken>           Okta SSWS token
-  -u, --okta-org-url <oktaOrgUrl>        Okta Org URL
-  -s, --twilio-account-sid <accountSid>  Twilio Account SID
-  -t, --twilio-auth-token <authToken>    Twilio Auth Token
-  -p, --prefix <areaCode>                Your company's phone number prefix, e.g. 415
-  -w, --webhook-url <webhookUrl>         Your Twilio Webhook URL, e.g. https://yourdomain.com/hooks/twilify
-  -h, --help                             output usage information
+  -v, --version                                           output the version number
+  -i, --init                                              Initialize the CLI
+  -o, --okta-token <oktaToken>                            Okta SSWS token
+  -u, --okta-org-url <oktaOrgUrl>                         Okta Org URL
+  -s, --twilio-account-sid <accountSid>                   Twilio Account SID
+  -t, --twilio-auth-token <authToken>                     Twilio Auth Token
+  -p, --prefix <areaCode>                                 Your company's phone number prefix, e.g. 415
+  -f, --twilio-function-base-url <twilioFunctionBaseUrl>  Your Twilio Functions Base URL, e.g. https://toolbox-bobcat-xxxx.twil.io
+  -h, --help                                              output usage information
 ```
 
 I suggest running `twilify --init` to get started in interactive mode. By
