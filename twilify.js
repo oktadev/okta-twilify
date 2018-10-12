@@ -1,7 +1,8 @@
+#!/usr/bin/env node
+
 const fs = require("fs");
 const path = require("path");
 
-const async = require("async");
 const inquirer = require("inquirer");
 const libPhoneNumber = require("libphonenumber-js");
 const mkdirp = require("mkdirp");
