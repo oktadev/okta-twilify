@@ -46,8 +46,6 @@ Each Okta user you have should set their mobile phone number in their profile.
 Every Okta user has a profile field named `mobilePhone` that should contain the
 employee's personal cell phone (if they choose).
 
-![Mobile Phone](/img/mobile-number.png)
-
 `twilify` will ONLY purchase company phone numbers for employees who have a cell
 phone listed in this field. This prevents you from purchasing phone numbers
 through Twilio (phone numbers are typically $1/mo/number) that won't be used.
