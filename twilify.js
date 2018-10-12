@@ -36,8 +36,8 @@ const PARAMS = [
     message: "Please enter your company's phone number prefix (area code)"
   },
   {
-    name: "webhookUrl",
-    message: "Please enter your Twilio Webhook URL. This should be something like https://yourdomain.com/hooks/twilify"
+    name: "twilioFunctionBaseUrl",
+    message: "Please enter your Twilio Functions base URL. This should be something like https://toolbox-bobcat-xxxx.twil.io"
   }
 ];
 const PARAM_NAMES = PARAMS.map(o => o.name);
@@ -50,7 +50,7 @@ program
   .option("-s, --twilio-account-sid <accountSid>", "Twilio Account SID")
   .option("-t, --twilio-auth-token <authToken>", "Twilio Auth Token")
   .option("-p, --prefix <areaCode>", "Your company's phone number prefix, e.g. 415")
-  .option("-w, --webhook-url <webhookUrl>", "Your Twilio Webhook URL, e.g. https://yourdomain.com/hooks/twilify")
+  .option("-f, --twilio-function-base-url <twilioFunctionBaseUrl>", "Your Twilio Functions Base URL, e.g. https://toolbox-bobcat-xxxx.twil.io")
   .parse(process.argv)
 
 async function init() {
@@ -95,9 +95,8 @@ function cleanPhoneNumber(phoneNumber) {
   return libPhoneNumber.formatNumber(parsedNumber, "International").replace(/ /g,"");
 }
 
-async function purchaseNumber(user, config) {
-  let client = new twilio(config.twilioAccountSid, config.twilioAuthToken);
-  let purchasedNumber, resp;
+async function purchaseNumber(client, user, config) {
+  let createdNumber, purchasedNumber, resp;
 
   try {
     resp = await client.availablePhoneNumbers("US").local.list({ areaCode: config.prefix });
@@ -114,7 +113,11 @@ async function purchaseNumber(user, config) {
   purchasedNumber = resp[0].phoneNumber;
 
   try {
-    await client.incomingPhoneNumbers.create({ phoneNumber: purchasedNumber });
+    createdNumber = await client.incomingPhoneNumbers.create({
+      phoneNumber: purchasedNumber,
+      voiceUrl: config.twilioFunctionBaseUrl + "/call-forward",
+      smsUrl: config.twilioFunctionBaseUrl + "/sms-forward"
+    });
   } catch (err) {
     console.error(err);
     process.exit(1);
@@ -147,10 +150,10 @@ async function getConfig() {
 }
 
 async function main() {
-  let client, config, user;
+  let oktaClient, twilioClient, config, user;
 
   config = await getConfig();
-  client = new okta.Client({
+  oktaClient = new okta.Client({
     orgUrl: config.oktaOrgUrl,
     token: config.oktaToken,
     requestExecutor: new okta.DefaultRequestExecutor(),
@@ -159,8 +162,9 @@ async function main() {
       expirationPoll: null
     })
   });
+  twilioClient = new twilio(config.twilioAccountSid, config.twilioAuthToken);
 
-  client.listUsers().each(user => {
+  oktaClient.listUsers().each(user => {
     let cleanedMobileNumber;
 
     if (!user.profile.mobilePhone) {
@@ -179,7 +183,7 @@ async function main() {
     }
 
     if (!user.profile.primaryPhone) {
-      purchaseNumber(user, config)
+      purchaseNumber(twilioClient, user, config)
         .then(purchasedNumber => {
           user.profile.primaryPhone = purchasedNumber;
           user.update();
