@@ -1,0 +1,40 @@
+{
+  "name": "okta-twilify",
+  "version": "0.0.1",
+  "description": "Automatically assign dedicated company phone numbers to each employee using Twilio.",
+  "main": "twilify.js",
+  "dependencies": {
+    "@okta/okta-sdk-nodejs": "^1.2.0",
+    "commander": "^2.19.0",
+    "inquirer": "^6.2.0",
+    "libphonenumber-js": "^1.5.1",
+    "mkdirp": "^0.5.1",
+    "twilio": "^3.22.0",
+    "untildify": "^3.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oktadeveloper/okta-twilify.git"
+  },
+  "bin": {
+    "twilify": "./twilify.js"
+  },
+  "keywords": [
+    "twilio",
+    "telephony",
+    "enteprise",
+    "security",
+    "automation",
+    "okta"
+  ],
+  "author": "Randall Degges",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/oktadeveloper/okta-twilify/issues"
+  },
+  "homepage": "https://github.com/oktadeveloper/okta-twilify#readme"
+}
